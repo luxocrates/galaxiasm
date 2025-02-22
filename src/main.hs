@@ -2,7 +2,9 @@
 -- for the dis/assembler.
 
 import Data.ByteString (pack, readFile, unpack, writeFile)
+import System.Directory (createDirectoryIfMissing)
 import System.Environment
+import System.Exit (die)
 import System.IO (hPutStr, readFile, stderr)
 
 import qualified Asm.Assemble (assemble)
@@ -14,7 +16,6 @@ import CommandLine
   )
 import Common.String (showHex4)
 import qualified Disasm.Disassemble (disassemble)
-import System.Directory (createDirectoryIfMissing)
 
 
 outDirName :: String
@@ -41,7 +42,7 @@ assemble inFilename = do
   contents <- System.IO.readFile inFilename
   case Asm.Assemble.assemble contents inFilename of
     Left err
-      -> sequence [hPutStr stderr $ err]
+      -> sequence [die err]
     Right arts
       -> do
         let (bs, _) = arts
