@@ -9,6 +9,7 @@ defaultFilename = "asm/galaxian.s"
 data CliConfig
   = Assemble
       String     -- filename
+      Bool       -- emit symbols file
   | Disassemble
       String     -- filename
   | ShowHelp
@@ -20,7 +21,7 @@ parseCommandLine argv = do
 
   return $ case accAction acc of
     AccShowHelp    -> ShowHelp
-    AccAssemble    -> Assemble $ filename acc
+    AccAssemble    -> Assemble (filename acc) (accEmitSyms acc)
     AccDisassemble -> Disassemble $ filename acc
 
   where
@@ -31,6 +32,7 @@ data CliConfigAcc =
   CliConfigAcc
     { accAction   :: AccAction
     , accFilename :: Maybe String
+    , accEmitSyms :: Bool
     }
 
 data AccAction
@@ -44,6 +46,7 @@ startingAcc =
   CliConfigAcc
     { accAction   = AccAssemble
     , accFilename = Nothing
+    , accEmitSyms = False
     }
 
 
@@ -58,6 +61,9 @@ iter (token:t) config
   | (token == "-h") || (token == "-help") || (token == "--help")
     = iter t $ config { accAction = AccShowHelp }
     -- `-h -d` would ignore the -h, but what should we really have done?
+  | token == "-s"
+    = iter t $ config { accEmitSyms = True }
+    -- ought to bark if -s used with -d
 
 iter (filename:t) config =
   if isJust $ accFilename config
@@ -71,6 +77,7 @@ showHelp = intercalate "\n"
   : map ("  " ++)
     [ "(no args)      build asm/galaxian.s to out/"
     , "(filename)     assemble (filename) to out/"
+    , "-s             emit symbols file (when assembling)"
     , "-d (filename)  disassemble (filename) to stdout"
     , "-help          show this usage info"
     ]
