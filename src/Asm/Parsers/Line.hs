@@ -1,4 +1,4 @@
-module Asm.Parsers.Line (parseLine) where
+module Asm.Parsers.Line (parseLine, parseInclude) where
 
 -- Note: if we try to force a compile fail by doing something like
 --
@@ -16,13 +16,16 @@ import Data.List (dropWhileEnd)
 import Asm.ArtifactAccumulator (___, use, used1, used2)
 import Asm.BaseParser (parseSuccessFromCs)
 import Asm.CharStream (confine, takeChar)
-import Asm.Parsers.Meta (parseAny, parseMaybe, peekWhile)
+import Asm.Parsers.Meta (parseAny, parseKeyword, parseMaybe, peekWhile)
 import Asm.Parsers.SelfContainedExpr (parseSelfContainedExpr)
 import Asm.Parsers.Tokens
   ( parseColon
+  , parseDoubleQuotes
   , parseEndOfLine
   , parseEquals
+  , parseFilename
   , parseLabel
+  , parseMandatorySpace
   , parseOptionalSpace
   , parseSemicolon
   )
@@ -125,3 +128,21 @@ parseComment =
   >>= ___ (parseSemicolon)
   >>= ___ (parseAnythingUntilEnd)
 
+
+-- Used in the IO-facing code to recurse into imports, as opposed to pass1
+-- 
+-- "  .include "filename" ; comment"
+parseInclude :: Parser String
+parseInclude =
+  \cs -> (parseSuccessFromCs cs)
+  >>= ___ (parseOptionalSpace)
+  >>= ___ (parseKeyword ".include" ())
+  >>= ___ (parseMandatorySpace)
+  >>= ___ (parseDoubleQuotes)
+  >>= use (parseFilename)
+  >>= ___ (parseDoubleQuotes)
+  >>= ___ (parseOptionalSpace)
+  >>= ___ (parseMaybe parseComment)
+  >>= ___ (parseEndOfLine)
+  >>= used1 id
+  
