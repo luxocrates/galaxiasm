@@ -9,18 +9,18 @@ import Asm.Types.AsmFailable
   , AsmErrorLoc (CsPos)
   , AsmFailable
   )
+import Asm.Types.LineAndSource (LineAndSource)
 import Asm.Types.Parser (ParseAttempt (ParseError, ParseNearly, ParseSuccess))
-import Asm.Types.Pass1 ( LineAndSource, Pass1Artifact, Pass1Artifacts)
+import Asm.Types.Pass1 ( Pass1Artifact, Pass1Artifacts)
 
 
--- | Pass 1: take in a whole file's worth of text, and break down each line into
---   a list of things the line is trying to do (intructions are left as text,
---   not parsed), augmented with trace information
+-- | Pass 1: Iterate through all the attributed source lines (.include's have
+--   already been expanded), and break down each into a list of things the line
+--   is trying to do (intructions are left as text, not parsed)
 pass1
-  :: String  -- text to assemble
-  -> String  -- filename to attribute to text
+  :: [LineAndSource]  -- text to assemble
   -> AsmFailable Pass1Artifacts
-pass1 program filename = foldM acc1Line [] (breakIntoLines program filename)
+pass1 attribLines = foldM acc1Line [] attribLines
 
 
 -- | Parse a single line and absorb its artifacts into the accumulator, or fail
@@ -34,14 +34,3 @@ acc1Line acc lineAndSource =
       -> Left err
     ParseSuccess (_, arts)
       -> Right $ acc ++ map (, lineAndSource) arts
-
-
--- | Break a corpus into lines, each augmented with source instrumentation
-breakIntoLines
-  :: String  -- text
-  -> String  -- filename
-  -> [LineAndSource]
-breakIntoLines program filename =
-  zip
-    (lines program)
-    (map (\lineNum -> (filename, lineNum)) [1..])

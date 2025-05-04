@@ -20,6 +20,7 @@ module Asm.Parsers.Tokens
   , parseMandatorySpace
   , parseEndOfLine
   , parseLabel
+  , parseFilename
   , parseε
   )
 where
@@ -127,6 +128,21 @@ parseLabel cs =
                  | otherwise            -> ParseSuccess (cs', label)
   where
     isLabelChar c = (c == '_') || isDigit c || isAlpha c
+
+
+-- | Parses a string that would be a valid filename, defined as any string of
+--   characters until an end quote. We're not sophisticated enough to allow
+--   escape codes for an intended double quote.
+parseFilename :: Parser String
+parseFilename cs =
+  let
+    (cs', filename) = peekWhile isNotEndQuote cs
+  in
+    if filename == ""
+      then ParseNearly cs
+      else ParseSuccess (cs', filename)
+  where
+    isNotEndQuote = (/= '"')
 
 
 -- | Always succeeds, without consuming more characters

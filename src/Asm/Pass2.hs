@@ -20,10 +20,10 @@ import Asm.Types.AsmFailable
   , AsmErrorLoc (CsPos, CsRange)
   , AsmFailable
   )
+import Asm.Types.LineAndSource (LineAndSource)
 import Asm.Types.Parser (ParseAttempt (ParseError, ParseNearly, ParseSuccess))
 import Asm.Types.Pass1
-  ( LineAndSource
-  , LineArtifact (Instruction, LabelDefinition, SymbolAssignment)
+  ( LineArtifact (Instruction, LabelDefinition, SymbolAssignment)
   , Pass1Artifact
   , Pass1Artifacts
   , PositionedString

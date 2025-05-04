@@ -3,8 +3,8 @@
 ## Limitations
 
 The Galaxiasm assembler was written to compile a symbolicated disassembly of the
-Galaxian ROMs, and it doesn’t do a whole lot more than that. Notably, it doesn’t
-allow sources to include other sources, and has no provision for macros.
+Galaxian ROMs, and it doesn’t do a whole lot more than that. Notably, it has no
+provision for macros.
 
 ## Command-line options
 
@@ -122,6 +122,13 @@ yourself.
                     ; its default font (ASCII-related)
                     ; No sentinel is emitted
                     ; Unsupported characters will cause a syntax error
+
+
+### .include
+
+    .include "constants.s"
+                    ; assumes same path as source file
+
 
 ## Output
 
