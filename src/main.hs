@@ -31,8 +31,9 @@ import Asm.Types.Pass2 (Symbol, SymTable, SymbolType(Label))
 outDirName :: String
 outDirName = "out"
 
-symFilePath :: String
-symFilePath = outDirName </> "syms"
+symsFilePath :: RomFormat -> String -> String
+symsFilePath Default _        = outDirName </> "galaxian_syms"
+symsFilePath _       basename = outDirName </> basename ++ "_syms"
 
 -- | Load a file, run it through the pure disassembler, print its output
 disassemble
@@ -65,10 +66,10 @@ symTableToStrings table = map tableEntryToString sortedFilteredSyms
                                                 | otherwise     = GT
 
 
-emitSymsFile :: SymTable -> [IO ()]
-emitSymsFile symTable = [
-  System.IO.writeFile symFilePath $ intercalate "\n" lines,
-  putStrLn $ "Wrote syms table to " ++ symFilePath
+emitSymsFile :: SymTable -> String -> [IO ()]
+emitSymsFile symTable path = [
+  System.IO.writeFile path $ intercalate "\n" lines,
+  putStrLn $ "Wrote syms table to " ++ path
   ]
   where
     lines = symTableToStrings symTable ++ [""]
@@ -156,7 +157,13 @@ assemble inFilename emitSyms format = do
                   else ""
                 )
             ]) (segment bs format (takeBaseName inFilename))
-            ++ (if emitSyms then emitSymsFile symTable else [])
+            ++ (
+              if emitSyms
+              then emitSymsFile
+                symTable
+                (symsFilePath format (takeBaseName inFilename))
+              else []
+              )
 
 
 -- | Main entrypoint for command-line executable
