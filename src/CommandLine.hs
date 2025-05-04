@@ -1,4 +1,9 @@
-module CommandLine ( CliConfig (..), parseCommandLine, showHelp) where
+module CommandLine
+  ( CliConfig (..)
+  , RomFormat (..)
+  , parseCommandLine
+  , showHelp
+) where
 
 import Data.List (intercalate)
 import Data.Maybe (isJust, fromMaybe)
@@ -6,10 +11,15 @@ import Data.Maybe (isJust, fromMaybe)
 
 defaultFilename = "asm/galaxian.s"
 
+data RomFormat
+  = Default     -- use Galaxian ROM sizes and labels
+  | Kb Int      -- emit fixed-length ROMs
+
 data CliConfig
   = Assemble
       String     -- filename
       Bool       -- emit symbols file
+      RomFormat  -- output format
   | Disassemble
       String     -- filename
   | ShowHelp
@@ -21,7 +31,10 @@ parseCommandLine argv = do
 
   return $ case accAction acc of
     AccShowHelp    -> ShowHelp
-    AccAssemble    -> Assemble (filename acc) (accEmitSyms acc)
+    AccAssemble    -> Assemble
+                        (filename acc)
+                        (accEmitSyms acc)
+                        (accRomFormat acc)
     AccDisassemble -> Disassemble $ filename acc
 
   where
@@ -30,9 +43,10 @@ parseCommandLine argv = do
 
 data CliConfigAcc =
   CliConfigAcc
-    { accAction   :: AccAction
-    , accFilename :: Maybe String
-    , accEmitSyms :: Bool
+    { accAction    :: AccAction
+    , accFilename  :: Maybe String
+    , accEmitSyms  :: Bool
+    , accRomFormat :: RomFormat
     }
 
 data AccAction
@@ -44,9 +58,10 @@ data AccAction
 startingAcc :: CliConfigAcc
 startingAcc =
   CliConfigAcc
-    { accAction   = AccAssemble
-    , accFilename = Nothing
-    , accEmitSyms = False
+    { accAction    = AccAssemble
+    , accFilename  = Nothing
+    , accEmitSyms  = False
+    , accRomFormat = Default
     }
 
 
@@ -56,6 +71,9 @@ iter :: [String] -> CliConfigAcc -> Either String CliConfigAcc
 iter [] config = Right config
 
 iter ("-d":t) config = iter t $ config { accAction = AccDisassemble }
+
+-- TODO: error-proof the `read`
+iter ("-k":k:t) config = iter t $ config { accRomFormat = Kb (read k) }
 
 iter (token:t) config
   | (token == "-h") || (token == "-help") || (token == "--help")
@@ -78,6 +96,7 @@ showHelp = intercalate "\n"
     [ "(no args)      build asm/galaxian.s to out/"
     , "(filename)     assemble (filename) to out/"
     , "-s             emit symbols file (when assembling)"
+    , "-k (number)    emit (number)-KiB ROMs (default: Galaxian names/sizes)"
     , "-d (filename)  disassemble (filename) to stdout"
     , "-help          show this usage info"
     ]

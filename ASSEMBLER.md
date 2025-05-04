@@ -12,6 +12,9 @@ For a list of all command-line options, run
 
     ./galaxiasm --help
 
+Note that the assembler will output 2 KiB ROM files with Galaxian-appropriate
+filenames unless it’s run with the `-k` flag.
+
 
 ## Global labels and symbols
 
