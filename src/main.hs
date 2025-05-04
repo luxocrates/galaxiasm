@@ -7,13 +7,14 @@ import Data.Map (toList)
 import System.Directory (createDirectoryIfMissing)
 import System.Environment
 import System.Exit (die)
-import System.FilePath (takeFileName, takeDirectory, (</>))
+import System.FilePath (takeBaseName, takeFileName, takeDirectory, (</>))
 import System.IO (hPutStr, readFile, writeFile, stderr)
 
 import qualified Asm.Assemble (assemble)
 import Asm.Rom (segment)
 import CommandLine
   ( CliConfig (Assemble, Disassemble, ShowHelp)
+  , RomFormat (..)
   , parseCommandLine
   , showHelp
   )
@@ -123,10 +124,11 @@ loadWithIncludes filename implicitPath parents =
 -- | Load a file, run it through the pure assembler, emit its output, or print
 --   errors
 assemble
-  :: String   -- input filename
-  -> Bool     -- emit symbols
-  -> IO [()]  -- IO for file writes and stdout/stderr printing
-assemble inFilename emitSyms = do
+  :: String     -- input filename
+  -> Bool       -- emit symbols
+  -> RomFormat  -- output format
+  -> IO [()]    -- IO for file writes and stdout/stderr printing
+assemble inFilename emitSyms format = do
   -- TODO: catch file read errors
   contents <- loadWithIncludes
     (takeFileName inFilename)
@@ -153,7 +155,7 @@ assemble inFilename emitSyms = do
                   then " (with " ++ show padding ++ " bytes padding)"
                   else ""
                 )
-            ]) (segment bs)
+            ]) (segment bs format (takeBaseName inFilename))
             ++ (if emitSyms then emitSymsFile symTable else [])
 
 
@@ -162,7 +164,7 @@ main :: IO [()]
 main = do
   argv <- getArgs
   case parseCommandLine argv of
-    Left err                       -> sequence [hPutStr stderr $ err ++ "\n"]
-    Right (Disassemble filename)   -> sequence [disassemble filename]
-    Right (Assemble filename syms) -> assemble filename syms
-    Right ShowHelp                 -> sequence [putStr showHelp]
+    Left err                              -> sequence [hPutStr stderr $ err ++ "\n"]
+    Right (Disassemble filename)          -> sequence [disassemble filename]
+    Right (Assemble filename syms format) -> assemble filename syms format
+    Right ShowHelp                        -> sequence [putStr showHelp]
