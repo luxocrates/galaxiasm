@@ -122,4 +122,4 @@ _1:
 
 STR:
   .gstring "HELLO WORLD"
-  .byte $00                    ; string termination
+  .db $00                    ; string termination

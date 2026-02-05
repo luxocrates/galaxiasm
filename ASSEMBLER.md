@@ -67,16 +67,16 @@ to be part of the instruction, not part of the expression:
 
 ## Directives
 
-### .byte
+### .db / .byte
 
-    .byte $12        ; emits a single byte
-    .byte 1,2,3      ; emits three bytes
+    .db $12        ; emits a single byte
+    .db 1,2,3      ; emits three bytes
 
-### .word
+### .dw / .word
 
-    .word $1234         ; emits $1234 as lowbyte/highbyte ($34, $12)
-    .word $1234,$5678   ; emits $34, $12, $78, $56
-    .word MMIO_VRAM     ; emits a pointer to symbol MMIO_VRAM
+    .dw $1234         ; emits $1234 as lowbyte/highbyte ($34, $12)
+    .dw $1234,$5678   ; emits $34, $12, $78, $56
+    .dw MMIO_VRAM     ; emits a pointer to symbol MMIO_VRAM
 
 ### .checksumbalance
 

@@ -35,8 +35,8 @@ import Asm.Types.Pass2
 -- | Parse any assembler directive
 parseDirective :: Parser OpcodeOrDirective
 parseDirective = parseAny
-  [ parseDotByte
-  , parseDotWord
+  [ parseDotDb
+  , parseDotDw
   , parseDotOrg
   , parseDotAlign
   , parseDotGString
@@ -44,11 +44,14 @@ parseDirective = parseAny
   ]
 
 
--- | Parse .byte directive, however many args
-parseDotByte :: Parser OpcodeOrDirective
-parseDotByte =
+-- | Parse .db/.byte directive, however many args
+parseDotDb :: Parser OpcodeOrDirective
+parseDotDb =
   \cs -> (parseSuccessFromCs cs)
-    >>= ___ (parseKeyword ".byte" ())
+    >>= ___ (parseAny
+              [ parseKeyword ".db" ()
+              , parseKeyword ".byte" ()
+              ])
     >>= ___ (parseMandatorySpace)
     >>= use (parseCommaSeparatedExprs)
     >>= ___ (parseEndOfLine)
@@ -58,10 +61,13 @@ parseDotByte =
             )
 
 -- | Parse .word directive, however many args
-parseDotWord :: Parser OpcodeOrDirective
-parseDotWord =
+parseDotDw :: Parser OpcodeOrDirective
+parseDotDw =
   \cs -> (parseSuccessFromCs cs)
-    >>= ___ (parseKeyword ".word" ())
+    >>= ___ (parseAny
+              [ parseKeyword ".dw" ()
+              , parseKeyword ".word" ()
+              ])
     >>= ___ (parseMandatorySpace)
     >>= use (parseCommaSeparatedExprs)
     >>= ___ (parseEndOfLine)

@@ -63,7 +63,7 @@ disasmOne_W32
      )
 
 -- If nothing's matched, just call it data
-disasmOne_W32 w32 _ _ [] = (".byte " ++ showHex2 (maskAndMove 8 0 w32), 1)
+disasmOne_W32 w32 _ _ [] = (".db " ++ showHex2 (maskAndMove 8 0 w32), 1)
 
 disasmOne_W32 w32 avail pc ((must, mustNot, prodBytes, prod) : ls)
   -- If the instruction is longer than the number of unprocessed bytes

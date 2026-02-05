@@ -169,32 +169,32 @@ _1:
   djnz _1                           ; repeat for all sprites
   ret
 _2:
-  .byte $11,PALETTE_2_BLU_RED_YLW   ; insect
-  .byte $19,PALETTE_6_WHT_RED_CYN   ; galaxip
-  .byte $1A,PALETTE_6_WHT_RED_CYN   ; 10 flag
-  .byte $1F,PALETTE_7_YLW_RED_PUR   ; explosion
-  .byte $23,PALETTE_2_BLU_RED_YLW   ; 800
-  .byte $29,PALETTE_1_ORG_BLU_YLW   ; flagship
-  .byte $20,PALETTE_7_YLW_RED_PUR   ; 150
-  .byte $18,PALETTE_4_BLU_CYN_RED   ; galaxip with outline
+  .db $11,PALETTE_2_BLU_RED_YLW     ; insect
+  .db $19,PALETTE_6_WHT_RED_CYN     ; galaxip
+  .db $1A,PALETTE_6_WHT_RED_CYN     ; 10 flag
+  .db $1F,PALETTE_7_YLW_RED_PUR     ; explosion
+  .db $23,PALETTE_2_BLU_RED_YLW     ; 800
+  .db $29,PALETTE_1_ORG_BLU_YLW     ; flagship
+  .db $20,PALETTE_7_YLW_RED_PUR     ; 150
+  .db $18,PALETTE_4_BLU_CYN_RED     ; galaxip with outline
 
 
 ; A complete sine wave, over 128 steps, centered around zero, with wavelength 160
 .align $100
 SINE_TABLE:
-  .byte $00, $03, $07, $0B, $0F, $13, $17, $1A
-  .byte $1E, $22, $25, $29, $2C, $2F, $32, $35
-  .byte $38, $3B, $3D, $40, $42, $44, $46, $48
-  .byte $49, $4B, $4C, $4D, $4E, $4F, $4F, $4F
-  .byte $50, $4F, $4F, $4F, $4E, $4D, $4C, $4B
-  .byte $49, $48, $46, $44, $42, $40, $3D, $3B
-  .byte $38, $35, $32, $2F, $2C, $29, $25, $22
-  .byte $1E, $1A, $17, $13, $0F, $0B, $07, $03
-  .byte $00, $FD, $F9, $F5, $F1, $ED, $E9, $E6
-  .byte $E2, $DE, $DB, $D7, $D4, $D1, $CE, $CB
-  .byte $C8, $C5, $C3, $C0, $BE, $BC, $BA, $B8
-  .byte $B7, $B5, $B4, $B3, $B2, $B1, $B1, $B1
-  .byte $B0, $B1, $B1, $B1, $B2, $B3, $B4, $B5
-  .byte $B7, $B8, $BA, $BC, $BE, $C0, $C3, $C5
-  .byte $C8, $CB, $CE, $D1, $D4, $D7, $DB, $DE
-  .byte $E2, $E6, $E9, $ED, $F1, $F5, $F9, $FD
+  .db $00, $03, $07, $0B, $0F, $13, $17, $1A
+  .db $1E, $22, $25, $29, $2C, $2F, $32, $35
+  .db $38, $3B, $3D, $40, $42, $44, $46, $48
+  .db $49, $4B, $4C, $4D, $4E, $4F, $4F, $4F
+  .db $50, $4F, $4F, $4F, $4E, $4D, $4C, $4B
+  .db $49, $48, $46, $44, $42, $40, $3D, $3B
+  .db $38, $35, $32, $2F, $2C, $29, $25, $22
+  .db $1E, $1A, $17, $13, $0F, $0B, $07, $03
+  .db $00, $FD, $F9, $F5, $F1, $ED, $E9, $E6
+  .db $E2, $DE, $DB, $D7, $D4, $D1, $CE, $CB
+  .db $C8, $C5, $C3, $C0, $BE, $BC, $BA, $B8
+  .db $B7, $B5, $B4, $B3, $B2, $B1, $B1, $B1
+  .db $B0, $B1, $B1, $B1, $B2, $B3, $B4, $B5
+  .db $B7, $B8, $BA, $BC, $BE, $C0, $C3, $C5
+  .db $C8, $CB, $CE, $D1, $D4, $D7, $DB, $DE
+  .db $E2, $E6, $E9, $ED, $F1, $F5, $F9, $FD

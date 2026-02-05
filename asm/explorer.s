@@ -400,42 +400,42 @@ SCREEN_TEXT:
   .gstring "            GITHUB DOT COM  "
   .gstring "          SLASH LUXOCRATES  "
   .gstring "                            "
-  .byte 0
+  .db 0
 
 
 SCREEN_PALETTES:
-  .byte PALETTE_0_BLK_BLK_WHT
-  .byte PALETTE_1_ORG_BLU_YLW
-  .byte PALETTE_0_BLK_BLK_WHT
-  .byte PALETTE_0_BLK_BLK_WHT
-  .byte PALETTE_0_BLK_BLK_WHT
-  .byte PALETTE_0_BLK_BLK_WHT
-  .byte PALETTE_0_BLK_BLK_WHT
-  .byte PALETTE_0_BLK_BLK_WHT
-  .byte PALETTE_0_BLK_BLK_WHT
-  .byte PALETTE_0_BLK_BLK_WHT
-  .byte PALETTE_0_BLK_BLK_WHT
-  .byte PALETTE_0_BLK_BLK_WHT
-  .byte PALETTE_0_BLK_BLK_WHT
-  .byte PALETTE_0_BLK_BLK_WHT
-  .byte PALETTE_0_BLK_BLK_WHT
-  .byte PALETTE_0_BLK_BLK_WHT
-  .byte PALETTE_3_BLU_PUR_RED
-  .byte PALETTE_0_BLK_BLK_WHT
-  .byte PALETTE_0_BLK_BLK_WHT
-  .byte PALETTE_0_BLK_BLK_WHT
-  .byte PALETTE_0_BLK_BLK_WHT
-  .byte PALETTE_0_BLK_BLK_WHT
-  .byte PALETTE_0_BLK_BLK_WHT
-  .byte PALETTE_6_WHT_RED_CYN
-  .byte PALETTE_6_WHT_RED_CYN
-  .byte PALETTE_6_WHT_RED_CYN
-  .byte PALETTE_6_WHT_RED_CYN
-  .byte PALETTE_0_BLK_BLK_WHT
-  .byte PALETTE_0_BLK_BLK_WHT
-  .byte PALETTE_7_YLW_RED_PUR
-  .byte PALETTE_7_YLW_RED_PUR
-  .byte PALETTE_0_BLK_BLK_WHT
+  .db PALETTE_0_BLK_BLK_WHT
+  .db PALETTE_1_ORG_BLU_YLW
+  .db PALETTE_0_BLK_BLK_WHT
+  .db PALETTE_0_BLK_BLK_WHT
+  .db PALETTE_0_BLK_BLK_WHT
+  .db PALETTE_0_BLK_BLK_WHT
+  .db PALETTE_0_BLK_BLK_WHT
+  .db PALETTE_0_BLK_BLK_WHT
+  .db PALETTE_0_BLK_BLK_WHT
+  .db PALETTE_0_BLK_BLK_WHT
+  .db PALETTE_0_BLK_BLK_WHT
+  .db PALETTE_0_BLK_BLK_WHT
+  .db PALETTE_0_BLK_BLK_WHT
+  .db PALETTE_0_BLK_BLK_WHT
+  .db PALETTE_0_BLK_BLK_WHT
+  .db PALETTE_0_BLK_BLK_WHT
+  .db PALETTE_3_BLU_PUR_RED
+  .db PALETTE_0_BLK_BLK_WHT
+  .db PALETTE_0_BLK_BLK_WHT
+  .db PALETTE_0_BLK_BLK_WHT
+  .db PALETTE_0_BLK_BLK_WHT
+  .db PALETTE_0_BLK_BLK_WHT
+  .db PALETTE_0_BLK_BLK_WHT
+  .db PALETTE_6_WHT_RED_CYN
+  .db PALETTE_6_WHT_RED_CYN
+  .db PALETTE_6_WHT_RED_CYN
+  .db PALETTE_6_WHT_RED_CYN
+  .db PALETTE_0_BLK_BLK_WHT
+  .db PALETTE_0_BLK_BLK_WHT
+  .db PALETTE_7_YLW_RED_PUR
+  .db PALETTE_7_YLW_RED_PUR
+  .db PALETTE_0_BLK_BLK_WHT
 
 
 ; Prints a byte to the screen as a 2-digit hex value
@@ -509,53 +509,53 @@ INC_LO_NIBBLE:
 
 
 TARGET_NIBBLE_0_TABLE:
-  .byte -TARGET_ROW*8 + 0*8 + 237   ; sprite V          (+0)
-  .word TARGET+1                    ; byte to affect    (+1)
-  .word DEC_HI_NIBBLE               ; left handler      (+3)
-  .word INC_HI_NIBBLE               ; right handler     (+5)
-  .word TARGET_NIBBLE_1_TABLE       ; next table        (+7)
-  .word STAGED_NIBBLE_1_TABLE       ; previous table    (+9)
+  .db -TARGET_ROW*8 + 0*8 + 237     ; sprite V          (+0)
+  .dw TARGET+1                      ; byte to affect    (+1)
+  .dw DEC_HI_NIBBLE                 ; left handler      (+3)
+  .dw INC_HI_NIBBLE                 ; right handler     (+5)
+  .dw TARGET_NIBBLE_1_TABLE         ; next table        (+7)
+  .dw STAGED_NIBBLE_1_TABLE         ; previous table    (+9)
 
 TARGET_NIBBLE_1_TABLE:
-  .byte -TARGET_ROW*8 + 1*8 + 237   ; sprite V          (+0)
-  .word TARGET+1                    ; byte to affect    (+1)
-  .word DEC_LO_NIBBLE               ; left handler      (+3)
-  .word INC_LO_NIBBLE               ; right handler     (+5)
-  .word TARGET_NIBBLE_2_TABLE       ; next table        (+7)
-  .word TARGET_NIBBLE_0_TABLE       ; previous table    (+9)
+  .db -TARGET_ROW*8 + 1*8 + 237     ; sprite V          (+0)
+  .dw TARGET+1                      ; byte to affect    (+1)
+  .dw DEC_LO_NIBBLE                 ; left handler      (+3)
+  .dw INC_LO_NIBBLE                 ; right handler     (+5)
+  .dw TARGET_NIBBLE_2_TABLE         ; next table        (+7)
+  .dw TARGET_NIBBLE_0_TABLE         ; previous table    (+9)
 
 TARGET_NIBBLE_2_TABLE:
-  .byte -TARGET_ROW*8 + 2*8 + 237   ; sprite V          (+0)
-  .word TARGET                      ; byte to affect    (+1)
-  .word DEC_HI_NIBBLE               ; left handler      (+3)
-  .word INC_HI_NIBBLE               ; right handler     (+5)
-  .word TARGET_NIBBLE_3_TABLE       ; next table        (+7)
-  .word TARGET_NIBBLE_1_TABLE       ; previous table    (+9)
+  .db -TARGET_ROW*8 + 2*8 + 237     ; sprite V          (+0)
+  .dw TARGET                        ; byte to affect    (+1)
+  .dw DEC_HI_NIBBLE                 ; left handler      (+3)
+  .dw INC_HI_NIBBLE                 ; right handler     (+5)
+  .dw TARGET_NIBBLE_3_TABLE         ; next table        (+7)
+  .dw TARGET_NIBBLE_1_TABLE         ; previous table    (+9)
 
 TARGET_NIBBLE_3_TABLE:
-  .byte -TARGET_ROW*8 + 3*8 + 237   ; sprite V          (+0)
-  .word TARGET                      ; byte to affect    (+1)
-  .word DEC_LO_NIBBLE               ; left handler      (+3)
-  .word INC_LO_NIBBLE               ; right handler     (+5)
-  .word STAGED_NIBBLE_0_TABLE       ; next table        (+7)
-  .word TARGET_NIBBLE_2_TABLE       ; previous table    (+9)
+  .db -TARGET_ROW*8 + 3*8 + 237     ; sprite V          (+0)
+  .dw TARGET                        ; byte to affect    (+1)
+  .dw DEC_LO_NIBBLE                 ; left handler      (+3)
+  .dw INC_LO_NIBBLE                 ; right handler     (+5)
+  .dw STAGED_NIBBLE_0_TABLE         ; next table        (+7)
+  .dw TARGET_NIBBLE_2_TABLE         ; previous table    (+9)
 
 STAGED_NIBBLE_0_TABLE:
-  .byte -STAGED_ROW*8 + 0*8 + 237   ; sprite V          (+0)
-  .word STAGED                      ; byte to affect    (+1)
-  .word DEC_HI_NIBBLE               ; left handler      (+3)
-  .word INC_HI_NIBBLE               ; right handler     (+5)
-  .word STAGED_NIBBLE_1_TABLE       ; next table        (+7)
-  .word TARGET_NIBBLE_3_TABLE       ; previous table    (+9)
+  .db -STAGED_ROW*8 + 0*8 + 237     ; sprite V          (+0)
+  .dw STAGED                        ; byte to affect    (+1)
+  .dw DEC_HI_NIBBLE                 ; left handler      (+3)
+  .dw INC_HI_NIBBLE                 ; right handler     (+5)
+  .dw STAGED_NIBBLE_1_TABLE         ; next table        (+7)
+  .dw TARGET_NIBBLE_3_TABLE         ; previous table    (+9)
 
 DEFAULT_TABLE:
 STAGED_NIBBLE_1_TABLE:
-  .byte -STAGED_ROW*8 + 1*8 + 237   ; sprite V          (+0)
-  .word STAGED                      ; byte to affect    (+1)
-  .word DEC_LO_NIBBLE               ; left handler      (+3)
-  .word INC_LO_NIBBLE               ; right handler     (+5)
-  .word TARGET_NIBBLE_0_TABLE       ; next table        (+7)
-  .word STAGED_NIBBLE_0_TABLE       ; previous table    (+9)
+  .db -STAGED_ROW*8 + 1*8 + 237     ; sprite V          (+0)
+  .dw STAGED                        ; byte to affect    (+1)
+  .dw DEC_LO_NIBBLE                 ; left handler      (+3)
+  .dw INC_LO_NIBBLE                 ; right handler     (+5)
+  .dw TARGET_NIBBLE_0_TABLE         ; next table        (+7)
+  .dw STAGED_NIBBLE_0_TABLE         ; previous table    (+9)
 
 
 ; Animations: a set of 8 pointers to sprite definitions, to be cycled through
@@ -563,25 +563,25 @@ STAGED_NIBBLE_1_TABLE:
 
 ; Digit-select sprites: an insect hovers left and right
 MOVING_ANIM:
-  .word MOVING_SPRITES_1
-  .word MOVING_SPRITES_2
-  .word MOVING_SPRITES_3
-  .word MOVING_SPRITES_4
-  .word MOVING_SPRITES_5
-  .word MOVING_SPRITES_6
-  .word MOVING_SPRITES_7
-  .word MOVING_SPRITES_8
+  .dw MOVING_SPRITES_1
+  .dw MOVING_SPRITES_2
+  .dw MOVING_SPRITES_3
+  .dw MOVING_SPRITES_4
+  .dw MOVING_SPRITES_5
+  .dw MOVING_SPRITES_6
+  .dw MOVING_SPRITES_7
+  .dw MOVING_SPRITES_8
 
 ; Nibble-adjust sprites: two flagships move up and down, mirroring each other
 ADJUSTING_ANIM:
-  .word ADJUSTING_SPRITES_1
-  .word ADJUSTING_SPRITES_2
-  .word ADJUSTING_SPRITES_3
-  .word ADJUSTING_SPRITES_2
-  .word ADJUSTING_SPRITES_1
-  .word ADJUSTING_SPRITES_2
-  .word ADJUSTING_SPRITES_3
-  .word ADJUSTING_SPRITES_2
+  .dw ADJUSTING_SPRITES_1
+  .dw ADJUSTING_SPRITES_2
+  .dw ADJUSTING_SPRITES_3
+  .dw ADJUSTING_SPRITES_2
+  .dw ADJUSTING_SPRITES_1
+  .dw ADJUSTING_SPRITES_2
+  .dw ADJUSTING_SPRITES_3
+  .dw ADJUSTING_SPRITES_2
 
 ; Sprite definitions: eight-byte tables to copy directly to the OBJRAM sprite tables
 ;
@@ -589,46 +589,46 @@ ADJUSTING_ANIM:
 ; Digit-select sprites: we use H=0 to keep the second sprite offscreen
 ;
 MOVING_SPRITES_1:
-  .byte $00,$52,$04,HEX_COLUMN*8-15 ; SPRITE1 v, image, palette, h
-  .byte $00,$00,$00,$00             ; SPRITE2 v, image, palette, h
+  .db $00,$52,$04,HEX_COLUMN*8-15                   ; SPRITE1 v, image, palette, h
+  .db $00,$00,$00,$00                               ; SPRITE2 v, image, palette, h
 
 MOVING_SPRITES_2:
-  .byte $01,$52,$04,HEX_COLUMN*8-16 ; SPRITE1 v, image, palette, h
-  .byte $00,$00,$00,$00             ; SPRITE2 v, image, palette, h
+  .db $01,$52,$04,HEX_COLUMN*8-16                   ; SPRITE1 v, image, palette, h
+  .db $00,$00,$00,$00                               ; SPRITE2 v, image, palette, h
 
 MOVING_SPRITES_3:
-  .byte $01,$51,$04,HEX_COLUMN*8-16 ; SPRITE1 v, image, palette, h
-  .byte $00,$00,$00,$00             ; SPRITE2 v, image, palette, h
+  .db $01,$51,$04,HEX_COLUMN*8-16                   ; SPRITE1 v, image, palette, h
+  .db $00,$00,$00,$00                               ; SPRITE2 v, image, palette, h
 
 MOVING_SPRITES_4:
-  .byte $01,$D2,$04,HEX_COLUMN*8-16 ; SPRITE1 v, image, palette, h
-  .byte $00,$00,$00,$00             ; SPRITE2 v, image, palette, h
+  .db $01,$D2,$04,HEX_COLUMN*8-16                   ; SPRITE1 v, image, palette, h
+  .db $00,$00,$00,$00                               ; SPRITE2 v, image, palette, h
 
 MOVING_SPRITES_5:
-  .byte $00,$D2,$04,HEX_COLUMN*8-15 ; SPRITE1 v, image, palette, h
-  .byte $00,$00,$00,$00             ; SPRITE2 v, image, palette, h
+  .db $00,$D2,$04,HEX_COLUMN*8-15                   ; SPRITE1 v, image, palette, h
+  .db $00,$00,$00,$00                               ; SPRITE2 v, image, palette, h
 
 MOVING_SPRITES_6:
-  .byte $ff,$D2,$04,HEX_COLUMN*8-16 ; SPRITE1 v, image, palette, h
-  .byte $00,$00,$00,$00             ; SPRITE2 v, image, palette, h
+  .db $ff,$D2,$04,HEX_COLUMN*8-16                   ; SPRITE1 v, image, palette, h
+  .db $00,$00,$00,$00                               ; SPRITE2 v, image, palette, h
 
 MOVING_SPRITES_7:
-  .byte $ff,$51,$04,HEX_COLUMN*8-16 ; SPRITE1 v, image, palette, h
-  .byte $00,$00,$00,$00             ; SPRITE2 v, image, palette, h
+  .db $ff,$51,$04,HEX_COLUMN*8-16                   ; SPRITE1 v, image, palette, h
+  .db $00,$00,$00,$00                               ; SPRITE2 v, image, palette, h
 
 MOVING_SPRITES_8:
-  .byte $ff,$52,$04,HEX_COLUMN*8-16 ; SPRITE1 v, image, palette, h
-  .byte $00,$00,$00,$00             ; SPRITE2 v, image, palette, h
+  .db $ff,$52,$04,HEX_COLUMN*8-16                   ; SPRITE1 v, image, palette, h
+  .db $00,$00,$00,$00                               ; SPRITE2 v, image, palette, h
 
 
 ADJUSTING_SPRITES_1:
-  .byte $00,$69,PALETTE_1_ORG_BLU_YLW,HEX_COLUMN*8-16   ; SPRITE1 v, image, palette, h
-  .byte $00,$29,PALETTE_1_ORG_BLU_YLW,HEX_COLUMN*8+5    ; SPRITE1 v, image, palette, h
+  .db $00,$69,PALETTE_1_ORG_BLU_YLW,HEX_COLUMN*8-16 ; SPRITE1 v, image, palette, h
+  .db $00,$29,PALETTE_1_ORG_BLU_YLW,HEX_COLUMN*8+5  ; SPRITE1 v, image, palette, h
 
 ADJUSTING_SPRITES_2:
-  .byte $00,$69,PALETTE_1_ORG_BLU_YLW,HEX_COLUMN*8-17   ; SPRITE1 v, image, palette, h
-  .byte $00,$29,PALETTE_1_ORG_BLU_YLW,HEX_COLUMN*8+6    ; SPRITE1 v, image, palette, h
+  .db $00,$69,PALETTE_1_ORG_BLU_YLW,HEX_COLUMN*8-17 ; SPRITE1 v, image, palette, h
+  .db $00,$29,PALETTE_1_ORG_BLU_YLW,HEX_COLUMN*8+6  ; SPRITE1 v, image, palette, h
 
 ADJUSTING_SPRITES_3:
-  .byte $00,$69,PALETTE_1_ORG_BLU_YLW,HEX_COLUMN*8-18   ; SPRITE1 v, image, palette, h
-  .byte $00,$29,PALETTE_1_ORG_BLU_YLW,HEX_COLUMN*8+7    ; SPRITE1 v, image, palette, h
+  .db $00,$69,PALETTE_1_ORG_BLU_YLW,HEX_COLUMN*8-18 ; SPRITE1 v, image, palette, h
+  .db $00,$29,PALETTE_1_ORG_BLU_YLW,HEX_COLUMN*8+7  ; SPRITE1 v, image, palette, h

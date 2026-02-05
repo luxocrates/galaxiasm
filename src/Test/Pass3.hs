@@ -64,10 +64,10 @@ ixyPlusDTests = and
 
 symbolTests :: Bool
 symbolTests = and
-  [ rig "sym=12\n.byte sym"     == Right [12]
-  , rig "sym=256\n.byte sym"    == Left "BoundsError 256 (-128) 255"
+  [ rig "sym=12\n.db sym"       == Right [12]
+  , rig "sym=256\n.db sym"      == Left "BoundsError 256 (-128) 255"
   , rig "sym = 1 + lbl\nlbl:"   == Left "UnavailSymbolError"
-  , rig ".word lbl\nlbl:"       == Right [0x02, 0x00]
+  , rig ".dw lbl\nlbl:"         == Right [0x02, 0x00]
 
   , rig "ld a,(_1)"             == Left "LocalUseButNoParentError"
   , rig "_1:"                   == Left "LocalDefButNoParentError"
@@ -76,9 +76,9 @@ symbolTests = and
   , rig "ld a,lbl"              == Left "UndefSymbolError \"lbl\""
 
     -- local labels
-  , rig ".org $1234\nparent:\n_1: .word _1"
+  , rig ".org $1234\nparent:\n_1: .dw _1"
                                 == Right ((take 0x1234 (repeat 0)) ++ [0x34, 0x12])
-  , rig "g1:\n_2:\ng2:.word _2"
+  , rig "g1:\n_2:\ng2:.dw _2"
                                 == Left "UndefSymbolError \"g2_2\""
   ]
 
@@ -107,12 +107,12 @@ exprTests = and
   , rig "ld a,$66|$33"           == Right [0x3e, 0x77]
 
     -- Highbyte/lowbyte
-  , rig ".byte >$1234"           == Right [0x12]
-  , rig ".byte <$1234"           == Right [0x34]
-  , rig ".byte >$0000+1"         == Right [1]
+  , rig ".db >$1234"             == Right [0x12]
+  , rig ".db <$1234"             == Right [0x34]
+  , rig ".db >$0000+1"           == Right [1]
 
     -- Unary minus
-  , rig ".byte -1"               == Right [0xff]
+  , rig ".db -1"                 == Right [0xff]
 
     -- Parentheses
     -- When the parens aren't on the outside, they're a sub-expression for an
@@ -129,37 +129,39 @@ exprTests = and
 
 directiveTests :: Bool
 directiveTests = and
-    -- .byte
-  [ rig ".byte 1"               == Right [0x01]
-  , rig ".byte 1,2"             == Right [0x01, 0x02]
-  , rig ".byte 1,2,3"           == Right [0x01, 0x02, 0x03]
-  , rig ".byte -1"              == Right [0xff]
-  , rig ".byte $ff"             == Right [0xff]
-  , rig ".byte $100"            == Left "BoundsError 256 (-128) 255"
-  , rig ".byte -128"            == Right [0x80]
-  , rig ".byte -129"            == Left "BoundsError (-129) (-128) 255"
+    -- .db
+  [ rig ".db 1"                 == Right [0x01]
+  , rig ".db 1,2"               == Right [0x01, 0x02]
+  , rig ".db 1,2,3"             == Right [0x01, 0x02, 0x03]
+  , rig ".db -1"                == Right [0xff]
+  , rig ".db $ff"               == Right [0xff]
+  , rig ".db $100"              == Left "BoundsError 256 (-128) 255"
+  , rig ".db -128"              == Right [0x80]
+  , rig ".db -129"              == Left "BoundsError (-129) (-128) 255"
+  , rig ".byte $aa"             == Right [0xaa]
 
-    -- .word
+    -- .dw
+  , rig ".dw $1234"             == Right [0x34, 0x12]
+  , rig ".dw $1234,$5678"       == Right [0x34, 0x12, 0x78, 0x56]
+  , rig ".dw 65535"             == Right [0xff, 0xff]
+  , rig ".dw 65536"             == Left "BoundsError 65536 (-32768) 65535"
+  , rig ".dw -32768"            == Right [0x00, 0x80]
+  , rig ".dw -32769"            == Left "BoundsError (-32769) (-32768) 65535"
   , rig ".word $1234"           == Right [0x34, 0x12]
-  , rig ".word $1234,$5678"     == Right [0x34, 0x12, 0x78, 0x56]
-  , rig ".word 65535"           == Right [0xff, 0xff]
-  , rig ".word 65536"           == Left "BoundsError 65536 (-32768) 65535"
-  , rig ".word -32768"          == Right [0x00, 0x80]
-  , rig ".word -32769"          == Left "BoundsError (-32769) (-32768) 65535"
 
     -- .org
-  , rig ".org 0\n.byte $ff"     == Right [0xff]
-  , rig ".org 3\n.byte $ff"     == Right [0, 0, 0, 0xff]
-  , rig ".org 3,-1\n.byte 0"    == Right [0xff, 0xff, 0xff, 0]
+  , rig ".org 0\n.db $ff"       == Right [0xff]
+  , rig ".org 3\n.db $ff"       == Right [0, 0, 0, 0xff]
+  , rig ".org 3,-1\n.db 0"      == Right [0xff, 0xff, 0xff, 0]
   , rig "nop\n.org 0"           == Left "OrgTooSmallError 0 1"
   , rig ".org $10000"           == Left "OrgTooBigError 65536"
   , rig ".org 10,256"           == Left "FillByteError 256"
 
     -- .align
-  , rig ".align 2\n.byte 1"     == Right [1]
-  , rig ".byte 9\n.align 2\n.byte 1"
+  , rig ".align 2\n.db 1"       == Right [1]
+  , rig ".db 9\n.align 2\n.db 1"
                                 == Right [9, 0, 1]
-  , rig ".byte 9\n.align 2,7\n.byte 1"
+  , rig ".db 9\n.align 2,7\n.db 1"
                                 == Right [9, 7, 1]
   , rig ".org $ffff\n.align $2" == Left "AlignTooBigError 65536"
 

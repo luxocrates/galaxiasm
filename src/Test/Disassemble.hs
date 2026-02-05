@@ -24,5 +24,5 @@ disasmOnly =
   , ([0xed, 0b01100011, 0x12, 0x34], "ld   ($3412),hl")
 
   -- non-opcodes
-  , ([0xcb, 0x30],                   ".byte $cb\n$0001: .byte $30")
+  , ([0xcb, 0x30],                   ".db $cb\n$0001: .db $30")
   ]

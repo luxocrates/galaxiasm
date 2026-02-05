@@ -11,7 +11,7 @@ import Asm.Types.Pass4 (Pass4Artifacts)
 
 
 test :: Bool
-test = rig ".byte 2\n.checksumbalance" == Right [0x02, 0xfe]
+test = rig ".db 2\n.checksumbalance" == Right [0x02, 0xfe]
 
 
 rig :: String -> Either String [Word8]
